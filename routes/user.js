@@ -49,7 +49,7 @@ router.post("/login", async (req, res) => {
 })
 // Get All Users
 router.get("/", (req, res) => {
-    const q = "SELECT id, email FROM user"
+    const q = "SELECT id,name,username, email FROM user"
     db.query(q,(err, data) => {
         if(err) return res.status(501).json(err)
         res.status(200).json(data)
