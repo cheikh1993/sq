@@ -2,9 +2,7 @@ const express = require("express")
 const db  = require("../db")
 
 const router = express.Router()
-const multer = require("multer")
 
-const upload = multer({dest: "../images"})
 router.post("/add", (req, res) => {
    
     const q = " INSERT INTO post (`title`,`content`, `categorie`, `Date`,`uid`) VALUE (?, ?, ?, ?,?)"
