@@ -33,6 +33,7 @@ require("./db")
 // main().catch(console.error)
 
 const cors = require("cors")
+const { patch } = require("./routes/user")
 const app = express()
 app.use(cors())
 
@@ -51,3 +52,9 @@ app.use("/api/post", routerPost)
 app.use("/api/sendmail", routernodemail)
 
 require("dotenv").config()
+app.get("*", (req,res) => {
+    res.sendFile(patch.join(__dirname,"index.html"))
+})
+app.listen(process.env.PORT_NUMBER || 3000, () => {
+    console.log(`Server run on port ${process.env.PORT_NUMBER}`);
+})

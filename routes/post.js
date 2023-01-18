@@ -1,7 +1,7 @@
 const express = require("express")
 const db  = require("../db")
 
-const router = express.Router()
+const router = express.Router   ()
 
 router.post("/add", (req, res) => {
    
