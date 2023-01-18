@@ -49,7 +49,7 @@ router.post("/login", async (req, res) => {
 })
 // Get All Users
 router.get("/", (req, res) => {
-    const q = "SELECT _id, email FROM user"
+    const q = "SELECT id, email FROM user"
     db.query(q,(err, data) => {
         if(err) return res.status(501).json(err)
         res.status(200).json(data)
@@ -58,7 +58,7 @@ router.get("/", (req, res) => {
 })
 // Get ONE USER
 router.get("/:id", (req, res) => {
-    const q = "SELECT * FROM user WHERE _id = ?"
+    const q = "SELECT * FROM user WHERE id = ?"
     db.query(q, [req.params.id], (err, data) => {
         if(err) return res.status(500).json(err)
         if(data.length === 0) return res.status(401).json("Utilisateur non trouve")
@@ -69,7 +69,7 @@ router.get("/:id", (req, res) => {
 })
 // DELETE USER
 router.delete("/:id",(req, res) => {
-    const q = "DELETE FROM user WHERE _id = ?"
+    const q = "DELETE FROM user WHERE id = ?"
     db.query(q,[req.params.id], (err, data) => {
          if(err) return res.status(500).json(err)
         if(data.length === 0) return res.status(401).json("Utilisateur non trouve")
@@ -78,7 +78,7 @@ router.delete("/:id",(req, res) => {
 })
 // UPDATE USER
 router.put("/:id", (req, res) => {
-    const q = "UPDATE user SET `email`=?, `password`=? WHERE _id = ?"
+    const q = "UPDATE user SET `email`=?, `password`=? WHERE id = ?"
     db.query(q,[req.params.id, req.body.email, req.body.password], (err, data) => {
         if(err) return res.status(500).json(err)
         res.status(201).json(data   )
