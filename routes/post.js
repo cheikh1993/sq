@@ -32,7 +32,7 @@ db.query(q,[],(err, data) => {
     // Get post per user
 
     router.get("/uid", (req, res) => {
-            const q = "SELECT * FROM post p INNER JOIN user u ON P.uid = u._id where uid= ?"
+            const q = "SELECT * FROM post p INNER JOIN user u ON P.uid = u.id where uid= ?"
     db.query(q,[
         req.body.uid
     ], (err, data) => {
@@ -43,8 +43,8 @@ db.query(q,[],(err, data) => {
     })
     router.get("/", (req,res) => {
         const q =  req.query.categorie ?
-        "SELECT DISTINCT * FROM post p INNER JOIN user u ON P.uid = u._id where categorie = ?" :
-        "SELECT DISTINCT * FROM post p INNER JOIN user u ON P.uid = u._id"
+        "SELECT DISTINCT * FROM post p INNER JOIN user u ON P.uid = u.id where categorie = ?" :
+        "SELECT DISTINCT * FROM post p INNER JOIN user u ON P.uid = u.id"
         db.query(q,[
             req.query.categorie
         ],(err, data) => {
@@ -54,7 +54,7 @@ db.query(q,[],(err, data) => {
         })  
     })
     router.get("/:id",(req, res) => {
-            const q = "SELECT title, content, categorie,email FROM post p INNER JOIN user u ON P.uid = u._id where id=?"
+            const q = "SELECT title, content, categorie,email FROM post p INNER JOIN user u ON P.uid = u.id where id=?"
     db.query(q,[req.params.id],(err, data) => {
         if(err) return res.status(501).json(err)
         res.status(201).json(data)
