@@ -51,6 +51,3 @@ app.use("/api/post", routerPost)
 app.use("/api/sendmail", routernodemail)
 
 require("dotenv").config()
-app.listen(process.env.PORT || 3000, () => {
-    console.log(`Server run on port ${process.env.PORT_NUMBER}`);
-})
