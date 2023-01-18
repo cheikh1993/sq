@@ -43,8 +43,8 @@ db.query(q,[],(err, data) => {
     })
     router.get("/", (req,res) => {
         const q =  req.query.categorie ?
-        "SELECT DISTINCT * FROM post p INNER JOIN user u ON P.uid = u.id where categorie = ?" :
-        "SELECT DISTINCT * FROM post p INNER JOIN user u ON P.uid = u.id"
+        "SELECT DISTINCT * FROM post p INNER JOIN user u ON p.uid = u.id where categorie = ?" :
+        "SELECT DISTINCT * FROM post p INNER JOIN user u ON p.uid = u.id"
         db.query(q,[
             req.query.categorie
         ],(err, data) => {
