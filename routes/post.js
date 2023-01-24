@@ -1,16 +1,33 @@
 const express = require("express")
+const multer = require("multer")
 const db  = require("../db")
 
 const router = express.Router   ()
+ 
+ const storage =  multer.diskStorage({
+    destination: (req,file,cb) => {
+        cb(null,"./images")
+    },
+    filename: (req,file,cb) => {
+        cb(null, Date.now()+file.originalname)
+    }
+ })
+ const upload = multer({storage})
 
-router.post("/add", (req, res) => {
+ router.post("/multer",upload.single("file"), (req,res) => {
+    const file = req.file
+  return  res.status(200).json(file.filename)
+ })
+
+router.post("/add", upload.single("file"), (req, res) => {
    
-    const q = " INSERT INTO post (`title`,`content`, `categorie`, `Date`,`uid`) VALUE (?, ?, ?, ?,?)"
+    const q = " INSERT INTO post (`title`,`content`, `categorie`, `img`,`Date`,`uid`) VALUE (?, ?, ?, ?,?,?)"
     
     db.query(q,[
         req.body.title,
         req.body.content,
         req.body.categorie,
+        req.file.filename,
         req.body.date,
         req.body.uid,
         
@@ -41,6 +58,8 @@ db.query(q,[],(err, data) => {
     })
 
     })
+
+    //Get All POsts
     router.get("/", (req,res) => {
         const q =  req.query.categorie ?
         "SELECT DISTINCT id_post,title, likes, content,categorie,date,name,username,email FROM user INNER JOIN post ON user.id = post.uid where categorie = ?" :
@@ -53,6 +72,7 @@ db.query(q,[],(err, data) => {
             res.status(200).json(data)
         })  
     })
+    // Get one post
     router.get("/:id",(req, res) => {
             const q = "SELECT title, likes,content, categorie,email FROM post p INNER JOIN user u ON p.uid = u.id where id_post=?"
     db.query(q,[req.params.id],(err, data) => {
