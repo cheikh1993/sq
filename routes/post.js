@@ -74,7 +74,7 @@ db.query(q,[],(err, data) => {
     })
     // Get one post
     router.get("/:id",(req, res) => {
-            const q = "SELECT title, likes,content, categorie,email FROM post p INNER JOIN user u ON p.uid = u.id where id_post=?"
+            const q = "SELECT title, likes,content,img, categorie,email FROM post p INNER JOIN user u ON p.uid = u.id where id_post=?"
     db.query(q,[req.params.id],(err, data) => {
         if(err) return res.status(501).json(err)
         res.status(201).json(data)
@@ -89,9 +89,9 @@ db.query(q,[],(err, data) => {
     })
 
     // update Post 
-    router.put("/:id", (req, res) => {
-        const q = "UPDATE post SET `title`= ?,`content` =?, `categorie`=? WHERE `id_post`=? "
-        const values = [req.body.title, req.body.content, req.body.categorie]
+    router.put("/:id",upload.single("file"), (req, res) => {
+        const q = "UPDATE post SET `title`= ?,`content` =?,`img` =?, `categorie`=? WHERE `id_post`=? "
+        const values = [req.body.title, req.body.content,req.file.filename, req.body.categorie]
         db.query(q,[...values, req.params.id],(err, data) => {
             if(err) return res.status(500).json(err)
            return res.status(201).json("post updated")
