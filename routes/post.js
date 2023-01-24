@@ -85,7 +85,7 @@ db.query(q,[],(err, data) => {
 
         db.query(q,[...values, req.params.id], (err, data= dataInfo ) => {
             if(err) return res.status(502).json(err)
-            return res.status(201).json(data)
+            return res.status(201).json("Like succes...")
         })
     })
     module.exports = router
