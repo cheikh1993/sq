@@ -98,6 +98,15 @@ db.query(q,[],(err, data) => {
         })
     }) 
 
+    //Update photo
+    router.put("/photo/:id",upload.single("file"),(req,res) => {
+        const q  = "UPDATE post SET `img`=? WHERE id_post =?"
+        db.query(q,[req.file.filename, req.params.id],(err, data) =>{
+            if(err) return res.status(501).json(err)
+            return res.status(201).json("file updated successfull")
+        })
+    })
+
     // add Like
     router.put("/like/:id", (req, res) => {
         const q = "UPDATE post SET `likes`=? WHERE `id_post`=?"
