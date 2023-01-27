@@ -4,7 +4,17 @@ const routerPost = require("./routes/post")
 const routernodemail = require("./routes/nodemail")
 const nodemail = require("nodemailer")
 require("./db")
-
+let age = "1990-01-15"
+const user={
+    name: "cheikh faye",
+    birthday: new Date(age),
+    get age(){
+        return Math.floor((Date.now() - this.birthday)/
+        (1000 * 60 * 60 * 24 * 365)
+        )
+    }
+}
+console.log(user.age);
 
 // const main = async () => {
 //     let testAccount = await nodemail.createTestAccount();

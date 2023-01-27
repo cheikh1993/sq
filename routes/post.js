@@ -7,6 +7,7 @@ const router = express.Router   ()
  const storage =  multer.diskStorage({
     destination: (req,file,cb) => {
         cb(null,"./images")
+        
     },
     filename: (req,file,cb) => {
         cb(null, Date.now()+file.originalname)
@@ -98,12 +99,14 @@ db.query(q,[],(err, data) => {
         })
     }) 
 
+
     //Update photo
     router.put("/photo/:id",upload.single("file"),(req,res) => {
         const q  = "UPDATE post SET `img`=? WHERE id_post =?"
         db.query(q,[req.file.filename, req.params.id],(err, data) =>{
+            const file = req.file
             if(err) return res.status(501).json(err)
-            return res.status(201).json("file updated successfull")
+            return res.status(201).json(file)
         })
     })
 
