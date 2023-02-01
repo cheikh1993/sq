@@ -16,31 +16,7 @@ const user={
 }
 console.log(user.age);
 
-// const main = async () => {
-//     let testAccount = await nodemail.createTestAccount();
-//     let transport = nodemail.createTransport({
-//         host: "smtp.ethereal.email",
-//         port: 587,
-//         secure: false,
-//         auth: {
-//             user: testAccount.user,
-//             pass: testAccount.pass
-//         }
-//     })
 
-//     let info = await transport.sendMail({
-//         from: '"Fred Foo 👻" <foo@example.com>',
-//         to: "bar@example.com, baz@example.com",
-//           subject: "Hello ✔", // Subject line
-//     text: "Hello world?", // plain text body
-//     html: "<b>Hello world?</b>", // html body
-//     })
-//       console.log("Message sent: %s", info.messageId);
-//   console.log("Preview URL: %s", nodemail.getTestMessageUrl(info));
-
-
-// }
-// main().catch(console.error)
 
 const cors = require("cors")
 const { patch } = require("./routes/user")

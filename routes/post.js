@@ -23,13 +23,13 @@ const router = express.Router   ()
 router.post("/add", upload.single("file"), (req, res) => {
    
     const q = " INSERT INTO post (`title`,`content`, `categorie`, `img`,`Date`,`uid`) VALUE (?, ?, ?, ?,?,?)"
-    
+
     db.query(q,[
         req.body.title,
         req.body.content,
         req.body.categorie,
-        req.file.filename,
-        req.body.date,
+        req.file.destination,
+       Date.now(),
         req.body.uid,
         
     ],(err, data) => {
@@ -115,7 +115,7 @@ db.query(q,[],(err, data) => {
         const q = "UPDATE post SET `likes`=? WHERE `id_post`=?"
         const values = [req.body.likes]
 
-        db.query(q,[...values, req.params.id], (err, data= dataInfo ) => {
+        db.query(q,[...values, req.params.id], (err, data ) => {
             if(err) return res.status(502).json(err)
             return res.status(201).json("Like succes...")
         })

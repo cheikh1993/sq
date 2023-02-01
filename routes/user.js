@@ -2,8 +2,12 @@ const express = require("express")
 const db = require("../db")
 const router = express.Router()
 const bcrypt = require("bcryptjs")
+const nodemailer = require("nodemailer")
+const smtptransport = require("nodemailer-smtp-transport")
+
+
 // Register
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
 
 
     const qs = " select * from user WHERE email = ?"
@@ -15,12 +19,15 @@ router.post("/register", (req, res) => {
         } else {
             const salt = bcrypt.genSaltSync(10)
             const hash = bcrypt.hashSync(req.body.password, salt)
+            const email = req.body.email
+
+            const randomNumber = Math.floor(Math.random() * 9000 + 1000)
 
             const q = "INSERT INTO user(`name`, `username`,`email`,`password`) VALUES (?)"
             const values = [
                 req.body.name,
-                req.body.username,
-                req.body.email,
+                req.body.username,  
+                email,
                 hash
             ]
             db.query(q, [values], (err, data) => {
@@ -30,6 +37,38 @@ router.post("/register", (req, res) => {
                 if (data) return res.status(201).json("user created successfull")
 
             })
+
+            let transport = nodemailer.createTransport(({
+                service: "gmail",
+                host: "mtp.gmail.com",
+                auth: {
+                    user: "cheikhfaye150193d@gmail.com", // generated ethereal user
+                    pass: "szugtvglxzbuhwcn"  //
+
+                },
+            }))
+            let mailOptions = {
+                from: 'cheikhfaye150193d@gmail.com',
+                to: email,//'fayedev93@gmail.com',
+                subject: "test d'envoi",
+                text: "merci d'avoir choisi",
+                html: `merci d'avoir choisi nos services <br /> <strong> ${randomNumber}</strong> `,
+                attachments: [
+                    {
+
+                        patch: "../text.pdf"
+                    },
+                ]
+
+            };
+            transport.sendMail(mailOptions, (err, info) => {
+                if (err) {
+                    res.status(500).json(err)
+                } else {
+                    res.status(201).json('Email sent: ' + info.response);
+                }
+            })
+
         }
     })
 
@@ -37,13 +76,44 @@ router.post("/register", (req, res) => {
 // Login
 router.post("/login", async (req, res) => {
     const q = "SELECT * FROM user WHERE email = ?"
-    await db.query(q, [req.body.email], (err, data) => {
+    const email = req.body.email
+    await db.query(q, [email], (err, data) => {
         if (err) { return res.status(500).json(err) }
-        if (data.length === 0) return res.status(500).json("User not exist")
+        if (data.length === 0) return res.status(500).json("Cette ulisateur n'existe pas")
         const passwordCorect = bcrypt.compareSync(req.body.password, data[0].password)
         if (!passwordCorect) return res.status(501).json("Mot de passe ou utilisateur incorrect")
 
         res.status(201).json(data)
+        let transport = nodemailer.createTransport(({
+            service: "gmail",
+            host: "mtp.gmail.com",
+            auth: {
+                user: "cheikhfaye150193d@gmail.com", // generated ethereal user
+                pass: "szugtvglxzbuhwcn"  //
+
+            },
+        }))
+        let mailOptions = {
+            from: 'cheikhfaye150193d@gmail.com',
+            to: data[0].email,//'fayedev93@gmail.com',
+            subject: "test d'envoi",
+            text: "merci d'avoir choisi",
+            html: `l'utilisateur  <br /> <strong> ${data[0].name} s'est connecter a ${new Date()}</strong> `,
+            attachments: [
+                {
+
+                    patch: "../text.pdf"
+                },
+            ]
+
+        };
+        transport.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                res.status(500).json(err)
+            } else {
+                res.status(201).json('Email sent: ' + info.response);
+            }
+        })
     })
 })
 // Get All Users
