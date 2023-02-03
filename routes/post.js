@@ -22,14 +22,13 @@ const router = express.Router   ()
 
 router.post("/add", upload.single("file"), (req, res) => {
    
-    const q = " INSERT INTO post (`title`,`content`, `categorie`, `img`,`Date`,`uid`) VALUE (?, ?, ?, ?,?,?)"
+    const q = " INSERT INTO post (`title`,`content`, `categorie`,`date`,`uid`) VALUE (?, ?, ?,?,?)"
 
     db.query(q,[
         req.body.title,
         req.body.content,
         req.body.categorie,
-        req.file.destination,
-       Date.now(),
+        new Date(),
         req.body.uid,
         
     ],(err, data) => {
