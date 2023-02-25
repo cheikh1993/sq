@@ -3,8 +3,8 @@ const db = require("../db")
 const router = express.Router()
 const bcrypt = require("bcryptjs")
 const nodemailer = require("nodemailer")
-const smtptransport = require("nodemailer-smtp-transport")
-
+const server = require("http").createServer()
+const io = require("socket.io")(server)
 
 // Register
 router.post("/register", async (req, res) => {
@@ -82,8 +82,8 @@ router.post("/login", async (req, res) => {
         if (data.length === 0) return res.status(500).json("Cette ulisateur n'existe pas")
         const passwordCorect = bcrypt.compareSync(req.body.password, data[0].password)
         if (!passwordCorect) return res.status(501).json("Mot de passe ou utilisateur incorrect")
-
-        res.status(201).json(data)
+const {password, ...others} = data[0]
+        res.status(201).json({others})
         let transport = nodemailer.createTransport(({
             service: "gmail",
             host: "mtp.gmail.com",
@@ -114,6 +114,10 @@ router.post("/login", async (req, res) => {
                 res.status(201).json('Email sent: ' + info.response);
             }
         })
+        io.on("connect", (socket) => {
+            console.log(data[0].id + "s'est connecte")
+        })
+
     })
 })
 // Get All Users
