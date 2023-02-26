@@ -1,6 +1,7 @@
 const express = require("express")
 const UserRoute = require("./routes/user")
 const routerPost = require("./routes/post")
+const routerFavorie = require("./routes/favorie")
 const routernodemail = require("./routes/nodemail")
 const nodemail = require("nodemailer")
 require("./db")
@@ -21,20 +22,20 @@ console.log(user.age);
 const cors = require("cors")
 const { patch } = require("./routes/user")
 const app = express()
+app.use(express.json())
 app.use(cors())
 
 app.use(express.urlencoded({extended: true}))
-app.use(express.json())
 app.use((_, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
-    
+    next()
 });
 
 app.use("/api/user", UserRoute)
 app.use("/api/post", routerPost)
+app.use("/api/favorie", routerFavorie)
 app.use("/api/sendmail", routernodemail)
 
 require("dotenv").config()
