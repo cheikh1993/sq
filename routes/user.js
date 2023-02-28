@@ -26,7 +26,7 @@ router.post("/register", async (req, res) => {
             const q = "INSERT INTO user(`name`, `username`,`email`,`password`) VALUES (?)"
             const values = [
                 req.body.name,
-                req.body.username,  
+                req.body.username,
                 email,
                 hash
             ]
@@ -77,14 +77,22 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
     const q = "SELECT * FROM user WHERE email = ?"
     const email = req.body.email
-    await db.query(q, [email], (err, data) => {
-        if (err) { return res.status(500).json(err) }
-        if (data.length === 0) return res.status(500).json("Cette ulisateur n'existe pas")
+    db.query(q, [email], (err, data) => {
+        if (err) {
+            return res.status(500).json(err)
+        } else if (data.length === 0) {
+
+            return res.status(500).json("Cette ulisateur n'existe pas")
+        }
+
         const passwordCorect = bcrypt.compareSync(req.body.password, data[0].password)
-        if (!passwordCorect) return res.status(501).json("Mot de passe ou utilisateur incorrect")
-const {password, ...others} = data[0]
-        res.status(201).json({others})
-        let transport = nodemailer.createTransport(({
+        if (!passwordCorect) {
+            return res.status(501).json("Mot de passe ou utilisateur incorrect")
+        }else{
+            const { password, ...others } = data[0]
+            res.status(201).json({ others })
+        }
+            let transport = nodemailer.createTransport(({
             service: "gmail",
             host: "mtp.gmail.com",
             auth: {
