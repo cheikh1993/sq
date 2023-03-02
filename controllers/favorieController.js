@@ -20,8 +20,8 @@ const getFavoriePost = (req, res) => {
 //==========Add a favorie post===========//
 const addFavoriPost = (req, res) => {
 
-const query = "SELECT * FROM favorie WHERE pid = ?"
-db.query(query,[req.body.pid], (err, data) => {
+const query = "SELECT * FROM favorie WHERE pid = ? AND uid = ?"
+db.query(query,[req.body.pid, req.body.uid], (err, data) => {
   if(err) return res.status(501).json(err)
   if(data.length !== 0) return res.status(402).json("Le post a ete deja ajoute aux favories")
   const q = "INSERT INTO favorie (`uid`, `pid`) VALUE (?,?)"
