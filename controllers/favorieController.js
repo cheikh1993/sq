@@ -1,9 +1,7 @@
 const db = require("../db")
-
-
 //==============Get favories post================//
 const getFavoriePost = (req, res) => {
-  const q = "SELECT id_post,title,content,categorie,likes,img,date,name,username,email FROM favorie INNER JOIN post ON favorie.id=post.id_post INNER JOIN user ON favorie.id=user.id WHERE favorie.uid=?"
+  const q = "SELECT title, id_post,Likes,img,categorie,Date, content, name,username,email FROM favorie f INNER JOIN post AS p ON f.pid=p.id_post INNER JOIN user u ON f.uid=u.id WHERE f.uid=(?)"
   try {
    
     db.query(q, [req.query.uid], (err, data) => {

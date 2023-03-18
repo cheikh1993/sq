@@ -88,11 +88,12 @@ router.post("/login", async (req, res) => {
         const passwordCorect = bcrypt.compareSync(req.body.password, data[0].password)
         if (!passwordCorect) {
             return res.status(501).json("Mot de passe ou utilisateur incorrect")
-        }else{
+        } else {
             const { password, ...others } = data[0]
             res.status(201).json({ others })
         }
-            let transport = nodemailer.createTransport(({
+
+        let transport = nodemailer.createTransport(({
             service: "gmail",
             host: "mtp.gmail.com",
             auth: {
