@@ -41,7 +41,7 @@ router.post("/add", upload.single("file"), (req, res) => {
 })
 router.get("/cat", (req, res) => {
     const q = "SELECT DISTINCT categorie categorie FROM post"
-    db.query(q, [], (err, data) => {
+    db.query(q, (err, data) => {
         if (err) return res.status(501).json(err)
         res.status(201).json(data)
     })
