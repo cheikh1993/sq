@@ -63,8 +63,8 @@ router.get("/uid", (req, res) => {
 //Get All POsts
 router.get("/", (req, res) => {
     const q = req.query.categorie ?
-        "SELECT DISTINCT id_post,title, likes, img,  content,categorie,date,name,username,email FROM user INNER JOIN post ON user.id = post.uid where categorie = ?" :
-        "SELECT DISTINCT id_post,title, likes,  img, content,categorie,date,name,username,email FROM user INNER JOIN post ON user.id = post.uid"
+        "SELECT DISTINCT id_post, uid,title, likes, img,  content,categorie,date,name,username,email FROM user INNER JOIN post ON user.id = post.uid where categorie = ?" :
+        "SELECT DISTINCT id_post,uid,title, likes,  img, content,categorie,date,name,username,email FROM user INNER JOIN post ON user.id = post.uid"
     db.query(q, [
         req.query.categorie
     ], (err, data) => {
