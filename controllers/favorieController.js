@@ -8,6 +8,7 @@ const getFavoriePost = (req, res) => {
       if (err) return res.status(500).json(err)
       if (data.length === 0) return res.status(401).json("Vos favories sont vides")
       res.status(200).json(data)
+    console.log(data);
     })
   } catch (error) {
     res.status(501).json(error)
